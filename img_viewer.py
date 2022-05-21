@@ -33,7 +33,7 @@ image_viewer_column = [
 layout = [
     [
         sg.Column(file_list_column),
-        sg.Vsperator(),
+        sg.VSeperator(),
         sg.Column(image_viewer_column),
     ]
 ]

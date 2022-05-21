@@ -1,5 +1,7 @@
 import cv2
 import mediapipe as mp
+from tkinter import *
+from PIL import Image, ImageTk
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
@@ -15,12 +17,19 @@ ringDown = False
 pinkyDown = False
 thumbCrossed = False
 
+root = Tk()
+s = Canvas(root)
+imag = s.create_image(0,0,image = None)
 def setLetter(x):
     cv2.putText(img, x, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
-    currentLetter = x
+    currentLetter = x   #use this to compare
 
 while True:
     ret, img = cap.read()
+    if ret:
+        photo = ImageTk.PhotoImage(image = Image.fromarray(img))
+        s.imgtk = photo
+        s.itemconfig(img,image = photo)
     img = cv2.flip(img, 1)
     h, w, c = img.shape
     results = hands.process(img)
@@ -201,5 +210,13 @@ while True:
                                    mp_draw.DrawingSpec((0, 255, 0), 4, 2)
                                    )
 
+    s.update()
     cv2.imshow("Hand Sign Detection", img)
     cv2.waitKey(1)
+
+root.after(0,mainscreen)
+s.pack()
+s.focus_set()
+root.mainloop()
+
+#create a function for each page, track mouse click and if mouse lin range activate function
