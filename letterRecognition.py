@@ -60,9 +60,12 @@ while True:
             else:
                 pinkyDown = False
 
+            # NEUTRAL HAND
+            if pointerDown == False and middleDown == False and ringDown == False and pinkyDown == False and thumbCrossed == False:
+                setLetter("Awaiting input...")
 
             # A
-            if pointerDown == True and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == False \
+            elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == False \
                 and lm_list[4].x > lm_list[5].x and lm_list[4].y < lm_list[7].y:
                 setLetter("A")
 
@@ -72,13 +75,13 @@ while True:
 
             # C
             elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == False \
-                    and lm_list[4].x > lm_list[2].x and lm_list[8].x > lm_list[6].x and lm_list[12].x > lm_list[10].x and \
-                    lm_list[16].x > lm_list[14].x and lm_list[20].x > lm_list[18].x:
+                and lm_list[4].x > lm_list[2].x and lm_list[8].x > lm_list[6].x and lm_list[12].x > lm_list[10].x and \
+                lm_list[16].x > lm_list[14].x and lm_list[20].x > lm_list[18].x and lm_list[4].y > lm_list[12].y:
                 setLetter("C")
             
             # D
             elif pointerDown == False and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == True \
-                and lm_list[4].x >= lm_list[12].x:
+                and lm_list[4].x >= lm_list[12].x and lm_list[8].x < lm_list[9].x:
                 setLetter("D")
 
             # E
@@ -92,8 +95,104 @@ while True:
 
             # G
             elif lm_list[8].x > lm_list[6].x and lm_list[12].x < lm_list[10].x and lm_list[16].x < lm_list[14].x and \
-                lm_list[20].x < lm_list[18].x and lm_list[4].x > lm_list[2].x:
+                lm_list[20].x < lm_list[18].x and lm_list[4].x > lm_list[2].x and lm_list[0].x < lm_list[17].x and \
+                lm_list[0].x < lm_list[5].x and lm_list[5].y < lm_list[17].y and lm_list[4].y < lm_list[0].y:
                 setLetter("G")
+            
+            # H
+            elif lm_list[8].x > lm_list[6].x and lm_list[12].x > lm_list[10].x and lm_list[16].x < lm_list[14].x and \
+                lm_list[20].x < lm_list[18].x and lm_list[4].x > lm_list[2].x and lm_list[0].x < lm_list[17].x and \
+                lm_list[0].x < lm_list[5].x and lm_list[5].y < lm_list[17].y and lm_list[4].y < lm_list[17].y:
+                setLetter("H")
+
+            # I
+            elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == False and thumbCrossed == True \
+                and lm_list[0].x < lm_list[10].x:
+                setLetter("I")
+            
+            # J
+            elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == False and thumbCrossed == True:
+                setLetter("J")
+            
+            #K 
+            elif pointerDown == False and middleDown == False and ringDown == True and pinkyDown == True and thumbCrossed == True \
+                and lm_list[4].x > lm_list[10].x:
+                setLetter("K")
+
+            # L
+            elif pointerDown == False and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == False:
+                setLetter("L")
+            
+            # M
+            elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == True \
+                and lm_list[4].x < lm_list[14].x and lm_list[4].y < lm_list[18].y:
+                setLetter("M")
+
+            # N
+            elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == True \
+                and lm_list[4].x < lm_list[12].x and lm_list[4].y < lm_list[14].y:
+                setLetter("N")
+
+            # O
+            elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == False \
+                and lm_list[4].x > lm_list[2].x and lm_list[8].x > lm_list[6].x and lm_list[12].x > lm_list[10].x and \
+                lm_list[16].x > lm_list[14].x and lm_list[20].x > lm_list[18].x and lm_list[4].y < lm_list[12].y:
+                setLetter("O")
+
+            # P
+            elif pointerDown == True and middleDown == True and ringDown == False and pinkyDown == False and thumbCrossed == False \
+                and lm_list[4].x > lm_list[10].x and lm_list[0].x < lm_list[5].x:
+                setLetter("P")
+
+            # Q
+            elif pointerDown == True and middleDown == False and ringDown == False and pinkyDown == False and thumbCrossed == False \
+                and lm_list[4].x > lm_list[10].x and lm_list[0].x < lm_list[5].x:
+                setLetter("Q")
+
+            # R
+            elif pointerDown == False and middleDown == False and ringDown == True and pinkyDown == True and thumbCrossed == True \
+                and lm_list[8].x < lm_list[12].x:
+                setLetter("R")
+
+            # S
+            elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == True \
+                and lm_list[4].y > lm_list[14].y and lm_list[4].x < lm_list[16].x:
+                setLetter("S")
+
+            # T
+            elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == True \
+                and lm_list[4].y < lm_list[7].y:
+                setLetter("T")
+
+            # U
+            elif pointerDown == False and middleDown == False and ringDown == True and pinkyDown == True and thumbCrossed == True \
+                and lm_list[8].x < lm_list[1].x:
+                setLetter("U")
+
+            # V
+            elif pointerDown == False and middleDown == False and ringDown == True and pinkyDown == True and thumbCrossed == True \
+                and lm_list[8].x > lm_list[1].x:
+                setLetter("V")
+            
+            # W
+            elif pointerDown == False and middleDown == False and ringDown == False and pinkyDown == True and thumbCrossed == True:
+                setLetter("W")
+
+            # X
+            elif pointerDown == False and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == True \
+                and lm_list[8].y > lm_list[7].y:
+                setLetter("X")
+
+            # Y
+            elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == False and thumbCrossed == False:
+                setLetter("Y")
+
+            # Z
+            elif pointerDown == False and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == True \
+                and lm_list[4].x >= lm_list[12].x and lm_list[8].x > lm_list[9].x:
+                setLetter("Z")
+
+
 
             mp_draw.draw_landmarks(img, hand_landmark,
                                    mp_hands.HAND_CONNECTIONS,
