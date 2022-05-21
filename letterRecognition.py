@@ -81,7 +81,7 @@ while True:
             
             # D
             elif pointerDown == False and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == True \
-                and lm_list[4].x >= lm_list[12].x and lm_list[8].x < lm_list[9].x:
+                and lm_list[4].x >= lm_list[12].x and lm_list[8].x > lm_list[0].x:
                 setLetter("D")
 
             # E
@@ -104,6 +104,7 @@ while True:
                 lm_list[20].x < lm_list[18].x and lm_list[4].x > lm_list[2].x and lm_list[0].x < lm_list[17].x and \
                 lm_list[0].x < lm_list[5].x and lm_list[5].y < lm_list[17].y and lm_list[4].y < lm_list[17].y:
                 setLetter("H")
+                
 
             # I
             elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == False and thumbCrossed == True \
@@ -189,7 +190,7 @@ while True:
 
             # Z
             elif pointerDown == False and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == True \
-                and lm_list[4].x >= lm_list[12].x and lm_list[8].x > lm_list[9].x:
+                and lm_list[4].x >= lm_list[12].x and lm_list[8].x < lm_list[0].x:
                 setLetter("Z")
 
 
