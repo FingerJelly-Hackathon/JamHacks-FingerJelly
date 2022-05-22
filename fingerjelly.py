@@ -253,7 +253,7 @@ s.configure(bg="thistle2")
 s.create_rectangle(340,0, 390,270, fill="MediumPurple4", outline="MediumPurple4")
 s.create_polygon(341,-20, 340,-20, 330,10, 320,40, 330,70, 340,100, 330,130, 320,160, 330,190, 340,220, 330,250, 340,280, 340,280, fill="MediumPurple4", smooth=1)
 
-    # Points
+# Points
 s.create_text(370, 10, text=str(points), fill="thistle2", justify='right')
 
 # Lives
@@ -277,7 +277,7 @@ balls = []
 # CREATES FALLING LETTERS
 
 for i in range(1):
-    xran.append(randint(10,310))
+    xran.append(randint(10,300))
     y.append(0)
     right.append(random.choice(letters))
     ballText.append(0)
@@ -289,6 +289,12 @@ def drawBalls():
         balls[i] = s.create_oval(xran[i], y[i], xran[i]+ovalwidth, y[i]+ovalwidth, fill='MediumPurple4', outline="MediumPurple4")
         ballText[i] = s.create_text(xran[i]+10, y[i]+10, fill="thistle2", text=right[i])
         
+    def newBall():
+        s.create_oval(xran[i], y[i]-1, xran[i]+ovalwidth, y[i]+ovalwidth-1, fill='thistle2', outline="thistle2")
+        xran[i] = randint(10,300)
+        y[i] = 0
+        right[i] = random.choice(letters)
+    
     global currentLetter
     global yspeed
     global points
@@ -306,22 +312,20 @@ def drawBalls():
 
         if bottomPos >= HEIGHT:
             lives = lives - 1
-            xran[i] = randint(10,310)
-            y[i] = 0
-            right[i] = random.choice(letters)
+            print(lives)
+            newBall()
             # ballText[i] = right[i]
         
 
         elif currentLetter == right[i]:
-            print("good")
             points = points + 50
-            xran[i] = randint(10,310)
-            y[i] = 0
-            right[i] = random.choice(letters)
+            print(points)
+            newBall()
         
     print("running...")
     
     s.after(30, drawBalls)
 
 s.after(30,drawBalls)
+
 root.mainloop()
