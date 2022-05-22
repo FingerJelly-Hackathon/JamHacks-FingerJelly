@@ -1,4 +1,6 @@
-# ==== SETUP ====
+import random
+from random import randint
+from turtle import width
 import cv2
 import mediapipe as mp
 from tkinter import *
@@ -8,7 +10,6 @@ mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
 mp_draw = mp.solutions.drawing_utils
 cap = cv2.VideoCapture(0)
-
 
 
 # Base variables for UI
@@ -24,9 +25,18 @@ ringDown = False
 pinkyDown = False
 thumbCrossed = False
 
+letters = ["A", "B", "C", "D", "F", "G", "H", "I",
+           "J", "K", "L", "M", "N", "P", "Q", "R"]
+
+#right = random.choice(letters)
+
+WIDTH, HEIGHT = 380, 260
+
+
 root = Tk()
-s = Canvas(root)
+s = Canvas(root, width=WIDTH, height=HEIGHT)
 imag = s.create_image(0,0,image = None)
+
 
 
 
@@ -243,7 +253,7 @@ s.configure(bg="thistle2")
 s.create_rectangle(340,0, 390,270, fill="MediumPurple4", outline="MediumPurple4")
 s.create_polygon(341,-20, 340,-20, 330,10, 320,40, 330,70, 340,100, 330,130, 320,160, 330,190, 340,220, 330,250, 340,280, 340,280, fill="MediumPurple4", smooth=1)
 
-# Points
+    # Points
 s.create_text(370, 10, text=str(points), fill="thistle2", justify='right')
 
 # Lives
@@ -251,6 +261,67 @@ for i in range(lives):
     s.create_oval(375-xShift, 30, 365-xShift, 20, fill="thistle2", outline = "thistle2")
     xShift += 15
 
-# Current translation
+ovalwidth = 20 
+# ovalheight = 24
 
+
+yspeed = 1
+
+numBalls = 1
+xran = []
+y = []
+right = []
+ballText = []
+balls = []
+
+# CREATES FALLING LETTERS
+
+for i in range(1):
+    xran.append(randint(10,310))
+    y.append(0)
+    right.append(random.choice(letters))
+    ballText.append(0)
+    balls.append(0)
+
+def drawBalls():
+    for i in range(1):
+        s.create_oval(xran[i], y[i]-1, xran[i]+ovalwidth, y[i]+ovalwidth-1, fill='thistle2', outline="thistle2")
+        balls[i] = s.create_oval(xran[i], y[i], xran[i]+ovalwidth, y[i]+ovalwidth, fill='MediumPurple4', outline="MediumPurple4")
+        ballText[i] = s.create_text(xran[i]+10, y[i]+10, fill="thistle2", text=right[i])
+        
+    global currentLetter
+    global yspeed
+    global points
+    global lives
+
+    for i in range(numBalls):
+        if not s.find_withtag(balls[i]):
+            return
+
+        y[i] += yspeed
+        # s.move(balls[i], 0, yspeed)
+        # s.move(ballText[i], 0, yspeed)
+
+        (leftPos, topPos, rightPos, bottomPos) = s.coords(balls[i])
+
+        if bottomPos >= HEIGHT:
+            lives = lives - 1
+            xran[i] = randint(10,310)
+            y[i] = 0
+            right[i] = random.choice(letters)
+            # ballText[i] = right[i]
+        
+
+        elif currentLetter == right[i]:
+            print("good")
+            points = points + 50
+            xran[i] = randint(10,310)
+            y[i] = 0
+            right[i] = random.choice(letters)
+        
+    print("running...")
+    
+    s.after(30, drawBalls)
+
+s.after(30,drawBalls)
 root.mainloop()
