@@ -1,3 +1,4 @@
+from cProfile import label
 import random
 from random import randint
 from turtle import width
@@ -5,6 +6,7 @@ import cv2
 import mediapipe as mp
 from tkinter import *
 from PIL import Image, ImageTk
+import tkinter
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
@@ -13,8 +15,8 @@ cap = cv2.VideoCapture(0)
 
 
 # Base variables for UI
-points = 0 
-lives = 3 
+points = 0
+lives = 3
 xShift = 0
 currentLetter = "..."
 
@@ -27,22 +29,27 @@ thumbCrossed = False
 
 letters = ["A", "B", "C", "D", "F", "G", "H", "I",
            "J", "K", "L", "M", "N", "P", "Q", "R"]
+facts = ["Sign language is the 4th most used language in the UK.","Sign language doesn't mirror spoken language"]
 
-#right = random.choice(letters)
+# right = random.choice(letters)
 
 WIDTH, HEIGHT = 380, 260
-
-
+ranfacts = random.choice(facts)
+gameOver = False
 root = Tk()
 s = Canvas(root, width=WIDTH, height=HEIGHT)
-imag = s.create_image(0,0,image = None)
+imag = s.create_image(0, 0, image=None)
 
 
+def done():
+    
+    gameOver = True
 
 
 # ==== IDENTIFIES ASL FINGERSPELLING ALPHABET ====
 def aslRecognition():
     global currentLetter
+    global gameOver
 
     def setLetter(currLetter):
         global currentLetter
@@ -149,7 +156,7 @@ def aslRecognition():
                 elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == False and thumbCrossed == True:
                     setLetter("J")
                 
-                #K 
+                # K 
                 elif pointerDown == False and middleDown == False and ringDown == True and pinkyDown == True and thumbCrossed == True \
                     and lm_list[4].x > lm_list[10].x:
                     setLetter("K")
@@ -238,9 +245,9 @@ def aslRecognition():
         s.update()
         cv2.imshow("Hand Sign Detection", img)
         cv2.waitKey(1)
-
-        s.create_rectangle(355,227,365,247, fill="MediumPurple4", outline="MediumPurple4")
-        s.create_text(360, 240, text=currentLetter, fill="thistle2")
+        if gameOver == False:
+            s.create_rectangle(355,227,365,247, fill="MediumPurple4", outline="MediumPurple4")
+            s.create_text(360, 240, text=currentLetter, fill="thistle2")
 
 
 # ==== DRAW GUI ELEMENTS ====
@@ -284,48 +291,60 @@ for i in range(1):
     balls.append(0)
 
 def drawBalls():
-    for i in range(1):
-        s.create_oval(xran[i], y[i]-1, xran[i]+ovalwidth, y[i]+ovalwidth-1, fill='thistle2', outline="thistle2")
-        balls[i] = s.create_oval(xran[i], y[i], xran[i]+ovalwidth, y[i]+ovalwidth, fill='MediumPurple4', outline="MediumPurple4")
-        ballText[i] = s.create_text(xran[i]+10, y[i]+10, fill="thistle2", text=right[i])
+    global gameOver
+
+    if gameOver == False:
+        for i in range(1):
+            s.create_oval(xran[i], y[i]-1, xran[i]+ovalwidth, y[i]+ovalwidth-1, fill='thistle2', outline="thistle2")
+            balls[i] = s.create_oval(xran[i], y[i], xran[i]+ovalwidth, y[i]+ovalwidth, fill='MediumPurple4', outline="MediumPurple4")
+            ballText[i] = s.create_text(xran[i]+10, y[i]+10, fill="thistle2", text=right[i])
+            
+        def newBall():
+            s.create_oval(xran[i], y[i]-1, xran[i]+ovalwidth, y[i]+ovalwidth-1, fill='thistle2', outline="thistle2")
+            xran[i] = randint(10,300)
+            y[i] = 0
+            right[i] = random.choice(letters)
         
-    def newBall():
-        s.create_oval(xran[i], y[i]-1, xran[i]+ovalwidth, y[i]+ovalwidth-1, fill='thistle2', outline="thistle2")
-        xran[i] = randint(10,300)
-        y[i] = 0
-        right[i] = random.choice(letters)
-    
-    global currentLetter
-    global yspeed
-    global points
-    global lives
+        global currentLetter
+        global yspeed
+        global points
+        global lives
 
-    for i in range(numBalls):
-        if not s.find_withtag(balls[i]):
-            return
+        for i in range(numBalls):
+            if not s.find_withtag(balls[i]):
+                return
 
-        y[i] += yspeed
-        # s.move(balls[i], 0, yspeed)
-        # s.move(ballText[i], 0, yspeed)
+            y[i] += yspeed
+            # s.move(balls[i], 0, yspeed)
+            # s.move(ballText[i], 0, yspeed)
 
-        (leftPos, topPos, rightPos, bottomPos) = s.coords(balls[i])
+            (leftPos, topPos, rightPos, bottomPos) = s.coords(balls[i])
 
-        if bottomPos >= HEIGHT:
-            lives = lives - 1
-            print(lives)
-            newBall()
-            # ballText[i] = right[i]
+            if bottomPos >= HEIGHT:
+                lives = lives - 1
+                print(lives)
+                newBall()
+                # ballText[i] = right[i]
+                s.create_rectangle(0,0,390,270,fill="MediumPurple")
+                s.create_text(185, 135, justify='center', text="GAME OVER",fill="thistle2")
+                #s.create_text(180, 145, justify='center', text=ranfacts,fill="thistle2")
+                s.create_text(165, 155, justify='center', text="Score:",fill="thistle2")
+                s.create_text(185, 155, justify='center', text=points,fill="thistle2")
+                gameOver = True
+
+            
+
+            elif currentLetter == right[i]:
+                points = points + 50
+                print(points)
+                newBall()
+                
         
-
-        elif currentLetter == right[i]:
-            points = points + 50
-            print(points)
-            newBall()
         
-    print("running...")
-    
-    s.after(30, drawBalls)
+        s.after(30, drawBalls)
 
 s.after(30,drawBalls)
+
+
 
 root.mainloop()
