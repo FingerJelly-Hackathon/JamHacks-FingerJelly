@@ -1,3 +1,4 @@
+# ==== SETUP ====
 import cv2
 import mediapipe as mp
 from tkinter import *
@@ -8,9 +9,12 @@ hands = mp_hands.Hands()
 mp_draw = mp.solutions.drawing_utils
 cap = cv2.VideoCapture(0)
 
-finger_tips = [8, 12, 16, 20]
-thumb_tip = 4
+# Base variables for UI
+points = 0 
+lives = 3 
+xShift = 0
 
+# Default vector positions
 pointerDown = False
 middleDown = False
 ringDown = False
@@ -20,11 +24,14 @@ thumbCrossed = False
 root = Tk()
 s = Canvas(root)
 imag = s.create_image(0,0,image = None)
-def setLetter(x):
-    cv2.putText(img, x, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
-    currentLetter = x  ########Refer to this varible to check if the currentletter is same as the person input.
 
-def Webcam():
+
+# ==== IDENTIFIES ASL FINGERSPELLING ALPHABET ====
+def aslRecognition():
+    def setLetter(x):
+        cv2.putText(img, x, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3) # Provides translation immediately on webcam
+        currentLetter = x   # Compares with falling fruit
+
     while True:
         ret, img = cap.read()
         if ret:
@@ -34,17 +41,17 @@ def Webcam():
         img = cv2.flip(img, 1)
         h, w, c = img.shape
         results = hands.process(img)
-        
-        if results.multi_hand_landmarks:
+
+        if results.multi_hand_landmarks: 
             for hand_landmark in results.multi_hand_landmarks:
                 lm_list = []
                 for id, lm in enumerate(hand_landmark.landmark):
                     lm_list.append(lm)
 
                 x, y = int(lm_list[8].x * w), int(lm_list[8].y * h)
-                print(x, y)
+                # print(x, y)
 
-                # Determine shortcuts
+                # Defines shortcuts for hand positions
                 if lm_list[4].x < lm_list[2].x:
                     thumbCrossed = True
                 else:
@@ -70,9 +77,9 @@ def Webcam():
                 else:
                     pinkyDown = False
 
-                # NEUTRAL HAND
+                # "Neutral hand"
                 if pointerDown == False and middleDown == False and ringDown == False and pinkyDown == False and thumbCrossed == False:
-                    setLetter("Awaiting input...")
+                    setLetter("...")
 
                 # A
                 elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == False \
@@ -204,22 +211,37 @@ def Webcam():
                     setLetter("Z")
 
 
-
+                # Draws mesh on hand
                 mp_draw.draw_landmarks(img, hand_landmark,
                                     mp_hands.HAND_CONNECTIONS,
                                     mp_draw.DrawingSpec((0, 0, 255), 6, 3),
                                     mp_draw.DrawingSpec((0, 255, 0), 4, 2)
                                     )
-        
-        s.update()
 
+        s.update()
         cv2.imshow("Hand Sign Detection", img)
         cv2.waitKey(1)
-Webcam()
 
-root.after(0, mainscreen)
+
+# ==== DRAW GUI ELEMENTS ====
+root.after(0,aslRecognition)
 s.pack()
 s.focus_set()
-root.mainloop()
 
-#create a function for each page. track mouse click and if mouse click with in range of button call function. 
+# Background
+s.configure(bg="MediumPurple1")
+s.create_rectangle(340,0, 390,270, fill="MediumPurple4", outline="MediumPurple4")
+s.create_polygon(341,-20, 340,-20, 330,10, 320,40, 330,70, 340,100, 330,130, 320,160, 330,190, 340,220, 330,250, 340,280, 341,280, fill="MediumPurple4", smooth=1)
+
+# Points
+s.create_text(370, 10, text=str(points), fill="white", justify='right')
+
+# Lives
+for i in range(lives):
+    s.create_oval(375-xShift, 30, 365-xShift, 20, fill="white", outline = "white")
+    xShift += 15
+
+# Current translation
+#s.create_text()
+
+root.mainloop()
