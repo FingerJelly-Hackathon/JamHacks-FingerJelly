@@ -9,10 +9,13 @@ hands = mp_hands.Hands()
 mp_draw = mp.solutions.drawing_utils
 cap = cv2.VideoCapture(0)
 
+
+
 # Base variables for UI
 points = 0 
 lives = 3 
 xShift = 0
+currentLetter = "..."
 
 # Default vector positions
 pointerDown = False
@@ -26,11 +29,15 @@ s = Canvas(root)
 imag = s.create_image(0,0,image = None)
 
 
+
 # ==== IDENTIFIES ASL FINGERSPELLING ALPHABET ====
 def aslRecognition():
-    def setLetter(x):
-        cv2.putText(img, x, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3) # Provides translation immediately on webcam
-        currentLetter = x   # Compares with falling fruit
+    global currentLetter
+
+    def setLetter(currLetter):
+        global currentLetter
+        cv2.putText(img, currLetter, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3) # Provides translation immediately on webcam
+        currentLetter = currLetter
 
     while True:
         ret, img = cap.read()
@@ -94,7 +101,7 @@ def aslRecognition():
                 elif pointerDown == True and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == False \
                     and lm_list[4].x > lm_list[2].x and lm_list[8].x > lm_list[6].x and lm_list[12].x > lm_list[10].x and \
                     lm_list[16].x > lm_list[14].x and lm_list[20].x > lm_list[18].x and lm_list[4].y > lm_list[12].y:
-                    setLetter("C")
+                   setLetter("C")
                 
                 # D
                 elif pointerDown == False and middleDown == True and ringDown == True and pinkyDown == True and thumbCrossed == True \
@@ -222,6 +229,9 @@ def aslRecognition():
         cv2.imshow("Hand Sign Detection", img)
         cv2.waitKey(1)
 
+        s.create_rectangle(355,227,365,247, fill="MediumPurple4", outline="MediumPurple4")
+        s.create_text(360, 240, text=currentLetter, fill="thistle2")
+
 
 # ==== DRAW GUI ELEMENTS ====
 root.after(0,aslRecognition)
@@ -229,19 +239,18 @@ s.pack()
 s.focus_set()
 
 # Background
-s.configure(bg="MediumPurple1")
+s.configure(bg="thistle2")
 s.create_rectangle(340,0, 390,270, fill="MediumPurple4", outline="MediumPurple4")
-s.create_polygon(341,-20, 340,-20, 330,10, 320,40, 330,70, 340,100, 330,130, 320,160, 330,190, 340,220, 330,250, 340,280, 341,280, fill="MediumPurple4", smooth=1)
+s.create_polygon(341,-20, 340,-20, 330,10, 320,40, 330,70, 340,100, 330,130, 320,160, 330,190, 340,220, 330,250, 340,280, 340,280, fill="MediumPurple4", smooth=1)
 
 # Points
-s.create_text(370, 10, text=str(points), fill="white", justify='right')
+s.create_text(370, 10, text=str(points), fill="thistle2", justify='right')
 
 # Lives
 for i in range(lives):
-    s.create_oval(375-xShift, 30, 365-xShift, 20, fill="white", outline = "white")
+    s.create_oval(375-xShift, 30, 365-xShift, 20, fill="thistle2", outline = "thistle2")
     xShift += 15
 
 # Current translation
-#s.create_text()
 
 root.mainloop()
